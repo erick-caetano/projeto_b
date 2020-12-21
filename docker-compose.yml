@@ -4,11 +4,26 @@ services:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
+    ports: 
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: projeto_b
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes: 
+      - ./sql_scripts/CREATE_DATABASE.sql:/docker-entrypoint-initdb.d/data.sql
+  backend:
+    # image: mysql
+    build: ./backend/.
+    environment:
+      MYSQL_HOST: mysql
+    restart: always
+    ports: 
+      - 8081:8080
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8889:8080
